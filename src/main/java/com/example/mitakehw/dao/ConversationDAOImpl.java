@@ -3,6 +3,7 @@ package com.example.mitakehw.dao;
 import com.example.mitakehw.dao.dbconnection.DBConnection;
 import com.example.mitakehw.dao.dbconnection.DBConnectionImpl;
 import com.example.mitakehw.models.Conversation;
+import com.example.mitakehw.utilities.TimeTool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -65,18 +66,6 @@ public class ConversationDAOImpl implements ConversationDAO {
             }
             conversation.setUsers(users);
 
-            // FIND MESSAGES IDS FROM COMVERSATION
-            // QUERY MESSAGE BY IDS
-//            PreparedStatement psGetMessagesCommitConversation = connection.prepareStatement(GET_MESSAGES_COMMIT_CONVERSATION);
-//            psGetUserCommitConversation.setString(1,conversationId.toString());
-//            resultSet = psGetUserCommitConversation.executeQuery();
-//            List<Message> messages = new ArrayList<>();
-//            while(resultSet.next()) {
-//                users.add(UUID.fromString(resultSet.getString("user_id")));
-//            }
-//
-//            conversation.setMessages(messages);
-
             // end transaction block, commit changes
             connection.commit();
             // good practice to set it back to default true
@@ -127,8 +116,8 @@ public class ConversationDAOImpl implements ConversationDAO {
             psInsertConversation.setString(1,object.getConversationId().toString());
             psInsertConversation.setString(2,object.getConversationName());
             psInsertConversation.setString(3,object.getCreatedUser());
-            psInsertConversation.setString (4,this.getCurrentTime());
-            psInsertConversation.setString (5,this.getCurrentTime());
+            psInsertConversation.setString (4, TimeTool.getCurrentTime());
+            psInsertConversation.setString (5,TimeTool.getCurrentTime());
             psInsertConversation.executeUpdate();
             for(UUID user:object.getUsers()){
                 PreparedStatement psInsertUserCommitConversation = connection.prepareStatement(INSERT_USER_COMMIT_CONVERSATION);
@@ -148,11 +137,5 @@ public class ConversationDAOImpl implements ConversationDAO {
 
 
     }
-    private String getCurrentTime(){
-        java.util.Date dt = new java.util.Date();
-        java.text.SimpleDateFormat sdf =
-                new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String currentTime = sdf.format(dt);
-        return currentTime;
-    }
+
 }

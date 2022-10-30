@@ -3,6 +3,7 @@ package com.example.mitakehw.services;
 import com.example.mitakehw.dao.ConversationDAO;
 import com.example.mitakehw.models.Conversation;
 import com.example.mitakehw.services.input.CreateConversationInput;
+import com.example.mitakehw.services.input.GetConversationsInput;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,5 +38,15 @@ public class TestConversationService {
         Assert.assertEquals(users.size(),createdConversation.getUsers().size());
 
     }
+    @Test
+    void testGetConversationIds() {
+        String user = "46ea17d2-1dd1-4d50-b3f2-a80f5d103198";
+        GetConversationsInput getConversationInput = new GetConversationsInput();
+        getConversationInput.setUser(user);
 
+        ConversationService conversationService = new ConversationService();
+        List<UUID> result = conversationService.getConversationsByUser(getConversationInput);
+        Assert.assertEquals(3,result.size());
+
+    }
 }

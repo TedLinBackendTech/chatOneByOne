@@ -24,7 +24,8 @@ public class ConversationDAOImpl implements ConversationDAO {
             "VALUES(?,?) ";
 
     private static final String GET_CONVERSATION = "SELECT * FROM conversation WHERE conversation_id=?";
-    private static final String GET_USER_COMMIT_CONVERSATION = "SELECT * FROM user_committed_conversation WHERE conversation_id=?";
+    private static final String GET_USERS_FROM_COMMIT_CONVERSATION = "SELECT user_id FROM user_committed_conversation WHERE conversation_id=?";
+    private static final String GET_CONVERSATIONS_BY_USER_FROM_COMMIT_CONVERSATION = "SELECT conversation_id FROM user_committed_conversation WHERE user_id=?";
 
     @Override
     public Optional<Conversation> findByUsers(List<UUID> users) {
@@ -52,10 +53,10 @@ public class ConversationDAOImpl implements ConversationDAO {
                 conversation.setConversationName(resultSet.getString("conversation_name"));
                 conversation.setCreatedUser(resultSet.getString("created_user"));
                 conversation.setCreatedAt(resultSet.getString("created_at"));
-                conversation.setCreatedAt(resultSet.getString("updated_at"));
+                conversation.setUpdatedAt(resultSet.getString("updated_at"));
             }
 
-            PreparedStatement psGetUserCommitConversation = connection.prepareStatement(GET_USER_COMMIT_CONVERSATION);
+            PreparedStatement psGetUserCommitConversation = connection.prepareStatement(GET_USERS_FROM_COMMIT_CONVERSATION);
             psGetUserCommitConversation.setString(1,conversationId.toString());
             resultSet = psGetUserCommitConversation.executeQuery();
             List<UUID> users = new ArrayList<>();
@@ -63,6 +64,18 @@ public class ConversationDAOImpl implements ConversationDAO {
                 users.add(UUID.fromString(resultSet.getString("user_id")));
             }
             conversation.setUsers(users);
+
+            // FIND MESSAGES IDS FROM COMVERSATION
+            // QUERY MESSAGE BY IDS
+//            PreparedStatement psGetMessagesCommitConversation = connection.prepareStatement(GET_MESSAGES_COMMIT_CONVERSATION);
+//            psGetUserCommitConversation.setString(1,conversationId.toString());
+//            resultSet = psGetUserCommitConversation.executeQuery();
+//            List<Message> messages = new ArrayList<>();
+//            while(resultSet.next()) {
+//                users.add(UUID.fromString(resultSet.getString("user_id")));
+//            }
+//
+//            conversation.setMessages(messages);
 
             // end transaction block, commit changes
             connection.commit();
@@ -79,6 +92,30 @@ public class ConversationDAOImpl implements ConversationDAO {
 
 
     }
+
+    @Override
+    public List<UUID> getConversationIdsByUserId(UUID userId) {
+        Connection connection = dbConnection.getConnection();
+        ResultSet resultSet;
+        List<UUID> conversationIds= new ArrayList<>();
+        try
+        {
+            PreparedStatement psGetCommitConversationIds = connection.prepareStatement(GET_CONVERSATIONS_BY_USER_FROM_COMMIT_CONVERSATION);
+            psGetCommitConversationIds.setString(1,userId.toString());
+            resultSet = psGetCommitConversationIds.executeQuery();
+            while(resultSet.next()) {
+                conversationIds.add(UUID.fromString(resultSet.getString("conversation_id")));
+            }
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return conversationIds;
+
+    }
+
+
 
 
     private void insert(Conversation object){

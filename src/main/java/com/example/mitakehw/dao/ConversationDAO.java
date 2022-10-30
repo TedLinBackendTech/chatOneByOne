@@ -13,6 +13,6 @@ public interface ConversationDAO{
     Optional<Conversation> findByUsers(List<UUID> users);
     void save(Conversation conversation);
     Optional<Conversation> get(UUID conversationId);
-
+    List<UUID>  getConversationIdsByUserId(UUID userId);
 
 }

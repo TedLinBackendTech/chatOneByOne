@@ -17,7 +17,6 @@ public class Conversation {
     private String createdUser;
 
     private List<UUID> users;
-
     private List<Message> messages;
 
     private String updatedAt;

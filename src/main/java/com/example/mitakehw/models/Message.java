@@ -10,6 +10,7 @@ import java.util.UUID;
 public class Message {
 
     private UUID conversationId;
+    private UUID messageId;
     // one by one
     private String fromUserId;
     private String toUserId;
@@ -18,4 +19,7 @@ public class Message {
 //    private String type; // define enum
 // will there be different type?
 
+    public Message() {
+        messageId = UUID.randomUUID();
+    }
 }

@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface MessageDAO {
     List<Message> getByConversationId(UUID userId);
 
+    void createMessage(Message message);
 }

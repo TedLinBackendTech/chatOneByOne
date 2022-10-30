@@ -28,6 +28,6 @@ public class Conversation {
         this.users = users;
     }
     public Conversation(){
-
+        conversationId = UUID.randomUUID();
     }
 }

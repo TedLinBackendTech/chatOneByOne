@@ -2,6 +2,7 @@ package com.example.mitakehw.controllers.conversation;
 
 import com.example.mitakehw.services.ConversationService;
 import com.example.mitakehw.services.input.CreateConversationInput;
+import com.example.mitakehw.services.input.GetConversationMessagesInput;
 import com.example.mitakehw.services.input.GetConversationsInput;
 import com.google.gson.Gson;
 import org.json.JSONArray;
@@ -61,26 +62,32 @@ public class ConversationController {
         return ResponseEntity.ok(returnObject);
     }
 
-//
-//    @GetMapping(path="/conversations/{conversationsId}/messages", consumes = "application/json", produces = "application/json")
-//    public ResponseEntity getConversationContent(@PathVariable("conversationsId") String conversationsId
-//            ,@RequestBody String conversationInfo){
-//        int limit = 0;
-//        String name="";
-//        try {
-//            JSONObject conversationJSON = new JSONObject(conversationInfo);
-//            name = conversationJSON.getString("conversation_name");
-//            limit = conversationJSON.getInt("limit");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        GetConversationMessagesInput input = new GetConversationMessagesInput();
-//        input.setConversationId(conversationsId);
-//        input.setConversationName(name);
-//        input.setLimit(limit);
-//
-//        return ResponseEntity.ok(conversationService.getConversation(input));
-//    }
+
+    @GetMapping(path="/conversations/{conversationsId}/messages", consumes = "application/json", produces = "application/json")
+    public ResponseEntity getConversationContent(@PathVariable("conversationsId") String conversationsId
+            ,@RequestBody String conversationInfo){
+        int limit = 0;
+        String name="";
+        try {
+            JSONObject conversationJSON = new JSONObject(conversationInfo);
+            name = conversationJSON.getString("conversation_name");
+            limit = conversationJSON.getInt("limit");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        GetConversationMessagesInput input = new GetConversationMessagesInput();
+        input.setConversationId(UUID.fromString(conversationsId));
+        input.setConversationName(name);
+        input.setLimit(limit);
+
+
+        Map map = new HashMap();
+        map.put("conversationIds",UUID.fromString(conversationsId));
+        map.put("messages",conversationService.getMessagesByConversationId(input));
+        String returnObject = new Gson().toJson(map);
+
+        return ResponseEntity.ok(returnObject);
+    }
 
 
 }

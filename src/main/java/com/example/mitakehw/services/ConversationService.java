@@ -1,10 +1,14 @@
 package com.example.mitakehw.services;
 
 import com.example.mitakehw.dao.ConversationDAOImpl;
+import com.example.mitakehw.dao.MessageDAO;
+import com.example.mitakehw.dao.MessageDAOImpl;
 import com.example.mitakehw.exceptions.ConversationAlreadyCreatedException;
 import com.example.mitakehw.models.Conversation;
 import com.example.mitakehw.dao.ConversationDAO;
+import com.example.mitakehw.models.Message;
 import com.example.mitakehw.services.input.CreateConversationInput;
+import com.example.mitakehw.services.input.GetConversationMessagesInput;
 import com.example.mitakehw.services.input.GetConversationsInput;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,7 @@ import java.util.UUID;
 @Service
 public class ConversationService {
     private final ConversationDAO conversationDao = new ConversationDAOImpl();
+    private final MessageDAO messageDao = new MessageDAOImpl();
 
 
     public Conversation createConversation(CreateConversationInput input) {
@@ -45,5 +50,10 @@ public class ConversationService {
     public List<UUID> getConversationsByUser(GetConversationsInput input) {
         List<UUID> conversationIds = conversationDao.getConversationIdsByUserId(UUID.fromString(input.getUser()));
         return  conversationIds;
+    }
+
+    public List<Message> getMessagesByConversationId(GetConversationMessagesInput input) {
+        return messageDao.getByConversationId(input.getConversationId());
+
     }
 }

@@ -5,6 +5,7 @@ import com.example.mitakehw.services.input.CreateConversationInput;
 import com.example.mitakehw.services.input.CreateMessagesInput;
 import com.example.mitakehw.services.input.GetConversationMessagesInput;
 import com.example.mitakehw.services.input.GetConversationsInput;
+import com.example.mitakehw.utilities.TimeTool;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,7 +87,7 @@ public class ConversationController {
     }
 
     @PostMapping(path="/conversations/{conversationId}/messages", consumes = "application/json", produces = "application/json")
-    public ResponseEntity createMessage(@PathVariable("conversationsId") String conversationId, @RequestBody String messageInfo){
+    public ResponseEntity createMessage(@PathVariable("conversationId") String conversationId, @RequestBody String messageInfo){
         String fromUserId="";
         String toUserId="";
         String content="";
@@ -105,13 +106,13 @@ public class ConversationController {
         input.setToUserId(toUserId);
         input.setContent(content);
 
-        conversationService.createMessage(input);
-//        Map map = new HashMap();
-//        map.put("conversationIds",UUID.fromString(conversationsId));
-//        map.put("messageId",conversationService.getMessagesByConversationId(input));
-//        String returnObject = new Gson().toJson(map);
+
+        Map map = new HashMap();
+        map.put("created_at", TimeTool.getCurrentTime());
+        map.put("messageId", conversationService.createMessage(input));
+        String returnObject = new Gson().toJson(map);
 //        // return messageid and timestamp
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(returnObject);
     }
 
 }

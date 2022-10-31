@@ -10,6 +10,5 @@ import java.util.UUID;
 public class GetConversationMessagesInput {
     private UUID conversationId;
     private String conversationName;
-    private int limit;
 
 }

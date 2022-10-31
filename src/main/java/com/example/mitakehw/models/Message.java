@@ -8,7 +8,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Message {
-
     private UUID conversationId;
     private UUID messageId;
     // one by one

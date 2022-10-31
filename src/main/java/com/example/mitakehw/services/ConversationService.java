@@ -1,8 +1,8 @@
 package com.example.mitakehw.services;
 
-import com.example.mitakehw.dao.ConversationDAOImpl;
+import com.example.mitakehw.dao.daoImpl.ConversationDAOImpl;
 import com.example.mitakehw.dao.MessageDAO;
-import com.example.mitakehw.dao.MessageDAOImpl;
+import com.example.mitakehw.dao.daoImpl.MessageDAOImpl;
 import com.example.mitakehw.models.Conversation;
 import com.example.mitakehw.dao.ConversationDAO;
 import com.example.mitakehw.models.Message;
